@@ -9,14 +9,14 @@ import (
 	"sync"
 	"time"
 
-	"github.com/graph-gophers/graphql-go/errors"
-	"github.com/graph-gophers/graphql-go/internal/common"
-	"github.com/graph-gophers/graphql-go/internal/exec/resolvable"
-	"github.com/graph-gophers/graphql-go/internal/exec/selected"
-	"github.com/graph-gophers/graphql-go/internal/query"
-	"github.com/graph-gophers/graphql-go/internal/schema"
-	"github.com/graph-gophers/graphql-go/log"
-	"github.com/graph-gophers/graphql-go/trace"
+	"github.com/ffxblue/graphql-go/errors"
+	"github.com/ffxblue/graphql-go/internal/common"
+	"github.com/ffxblue/graphql-go/internal/exec/resolvable"
+	"github.com/ffxblue/graphql-go/internal/exec/selected"
+	"github.com/ffxblue/graphql-go/internal/query"
+	"github.com/ffxblue/graphql-go/internal/schema"
+	"github.com/ffxblue/graphql-go/log"
+	"github.com/ffxblue/graphql-go/trace"
 )
 
 type Request struct {
@@ -202,7 +202,8 @@ func execFieldSelection(ctx context.Context, r *Request, s *resolvable.Schema, f
 		if f.field.UseMethodResolver() {
 			var in []reflect.Value
 			if f.field.HasContext {
-				in = append(in, reflect.ValueOf(traceCtx))
+				execCtx := WithField(traceCtx, Field{Alias: path.value.(string), Name: f.field.Name})
+				in = append(in, reflect.ValueOf(execCtx))
 			}
 			if f.field.ArgsPacker != nil {
 				in = append(in, f.field.PackedArgs)
